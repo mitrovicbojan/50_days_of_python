@@ -8,8 +8,17 @@ below, your function should return 3.
 
 register = {'Michael': 'yes', 'John': 'no', 'Peter': 'yes', 'Mary': 'yes'}
 '''
-def register_check():
-    print("hello")
+register = {'Michael': 'yes', 'John': 'no', 'Peter': 'yes', 'Mary': 'yes'}
+
+def register_check(dict):
+    students_in = 0
+    for i in dict.values():
+        if i == 'yes':
+            students_in = students_in + 1 
+    
+    return f"Number of students in school is: {students_in}."
+
+print(register_check(register))
 
 '''
 names = ["kerry", "dickson", "John", "Mary","carol","Rose","adam"]
