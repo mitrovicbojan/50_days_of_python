@@ -32,3 +32,17 @@ should return:
 ('kerry','dickson','carol','adam')
 
 '''
+
+names = ["kerry", "dickson", "John", "Mary","carol","Rose","adam"]
+
+def lowercase_tuple(lst):
+    low_list= []
+    for i in lst:
+        if i[0] == i[0].lower():
+            low_list.append(i)
+    
+    low_tuple = tuple(low_list)
+    return print(low_tuple)
+    
+    
+lowercase_tuple(names)
