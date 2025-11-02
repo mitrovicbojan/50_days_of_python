@@ -33,7 +33,7 @@ def my_discount():
             return final_price
 
         except ValueError:
-            print("❌ Invalid input. Please enter numeric values.")
+            print("Invalid input. Please enter numeric values.")
 
 price_after_discount = my_discount()
 print(price_after_discount)
@@ -57,6 +57,18 @@ students = ['Male', 'Female', 'female', 'male', 'male', 'male',
 
 def count_student_sex(lst):
     students_sex_list = [i.lower() for i in lst]
-    return print(students_sex_list)
+    
+    count_male = 0
+    count_female = 0        
+    
+    for sex in students_sex_list:
+        if sex == 'male':
+            count_male = count_male + 1
+        else:
+            count_female = count_female + 1
+            
+    final_count = [('Male', count_male), ('Female', count_female)]
+    
+    return print(final_count)
 
 count_student_sex(students)
