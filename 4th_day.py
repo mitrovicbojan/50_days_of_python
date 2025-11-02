@@ -32,8 +32,21 @@ words1 = ["Hate","remorse","vengeance"]
 words2 = ["Love","Hate"]
 
 def word_index(lst):
-    return "hello"
+    
+    #builds a set of lengths
+    #if all words have the same len, the set will have one unique value of 1
+    same_len = len({len(word) for word in lst}) == 1
+    
+    if same_len:
+        return 0
+    else:
+        #find word with the longest len
+        longest_word = max(lst, key=len)
+        #get index of the longest word
+        longest_word_index = lst.index(longest_word)
+        
+        return longest_word_index
     
     
-lst_index = word_index(words1)
+lst_index = word_index(words2)
 print(lst_index)

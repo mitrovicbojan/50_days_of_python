@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ship Discount Calculator</title>
+    <style>
+      /* Global styles */
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+        color: #333;
+      }
+      .container {
+        max-width: 1100px;
+        margin: auto;
+        padding: 20px;
+      }
+      h1 {
+        color: #1a73e8;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      /* Input form */
+      input[type="number"],
+      select {
+        padding: 8px;
+        margin: 5px 0;
+        width: 100%;
+        max-width: 200px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+      }
+      button {
+        padding: 10px 20px;
+        margin-top: 10px;
+        background: #1a73e8;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      button:hover {
+        background: #155ab6;
+        transform: translateY(-2px);
+      }
+
+      /* Result cards */
+      .result {
+        background: #fff;
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeIn 0.6s forwards;
+        position: relative;
+      }
+      .result h3 {
+        margin-top: 0;
+        color: #1a73e8;
+      }
+      .result p {
+        margin: 6px 0;
+      }
+
+      /* Table container */
+      .table-container {
+        background: #fff;
+        padding: 15px;
+        margin-top: 20px;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+      th,
+      td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: center;
+      }
+      th {
+        background: linear-gradient(45deg, #1a73e8, #4dabf5);
+        color: white;
+        position: sticky;
+        top: 0;
+      }
+      td.feasible {
+        background-color: #d4edda;
+      }
+      td.unreachable {
+        background-color: #f8d7da;
+      }
+      tr:hover {
+        background-color: #f1f1f1;
+        transition: all 0.3s;
+      }
+
+      /* Comparison section */
+      .comparison {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-top: 15px;
+      }
+      .comparison .card {
+        flex: 1 1 300px;
+        background: #fff;
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+        transition: transform 0.3s;
+      }
+      .comparison .card:hover {
+        transform: translateY(-5px);
+      }
+      .card h4 {
+        margin: 0 0 10px 0;
+        color: #1a73e8;
+      }
+
+      /* Animations */
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 800px) {
+        .comparison {
+          flex-direction: column;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Ship Discount Calculator</h1>
+
+      <div>
+        <label>Select Date:</label>
+        <select id="dateSelect"></select
+        ><br />
+
+        <label>Available cabins A:</label>
+        <input type="number" id="cabA" min="0" max="9" value="0" /><br />
+        <label>Available cabins B:</label>
+        <input type="number" id="cabB" min="0" max="12" value="0" /><br />
+        <label>Available cabins C:</label>
+        <input type="number" id="cabC" min="0" max="3" value="0" /><br />
+        <label>Current realized revenue:</label>
+        <input type="number" id="revenue" min="0" value="0" /><br />
+        <label>User Discount (%):</label>
+        <input
+          type="number"
+          id="userDiscount"
+          min="0"
+          max="100"
+          step="0.01"
+          value="0"
+        /><br />
+        <button onclick="calculate()">Calculate</button>
+      </div>
+
+      <div id="output"></div>
+      <div class="table-container" id="tableOutput"></div>
+
+      <script>
+        // Constants
+        const G = [4100, 3200, 2500]; // per person
+        const defaultCommission = 0.26;
+        const port_per_person = 330;
+        const max_passengers = 48;
+        const max_occupancy = 0.9;
+        const totalCabins = [9, 12, 3];
+
+        const dateTargets = {
+          "2025-11-01": { Low: 55000, Base: 70000, High: 110000 },
+          "2025-11-15": { Low: 60000, Base: 75000, High: 120000 },
+          "2025-12-01": { Low: 50000, Base: 68000, High: 105000 },
+        };
+
+        // Populate date dropdown
+        const dateSelect = document.getElementById("dateSelect");
+        for (const d of Object.keys(dateTargets)) {
+          const option = document.createElement("option");
+          option.value = d;
+          option.textContent = d;
+          dateSelect.appendChild(option);
+        }
+
+        // Net revenue calculation
+        function computeNetWithPassengers(
+          D,
+          availableCabins,
+          passengersToUse,
+          commissionRate = defaultCommission
+        ) {
+          let remaining = passengersToUse;
+          let netCabins = 0;
+          for (let i = 0; i < availableCabins.length; i++) {
+            let passengersInCat = Math.min(availableCabins[i] * 2, remaining);
+            netCabins +=
+              passengersInCat * G[i] * (1 - D) * (1 - commissionRate);
+            remaining -= passengersInCat;
+            if (remaining <= 0) break;
+          }
+          const portTotal = passengersToUse * port_per_person;
+          const totalNet = netCabins + portTotal;
+          const avgNetPP = totalNet / (passengersToUse || 1);
+          return {
+            totalNet,
+            avgNetPP,
+            passengersAdded: passengersToUse,
+            netFromCabins: netCabins,
+            portTotal,
+          };
+        }
+
+        // Highest discount feasible (loop from high to low)
+        function findHighestDiscount(targetValue, availableCabins, revenue) {
+          const steps = 200;
+          const totalPossible = Math.min(
+            Math.round(max_passengers * max_occupancy),
+            availableCabins.reduce((a, b) => a + b, 0) * 2
+          );
+          let realizedPassengers = 0;
+          for (let i = 0; i < availableCabins.length; i++) {
+            realizedPassengers += (totalCabins[i] - availableCabins[i]) * 2;
+          }
+
+          let best = null;
+          for (let i = steps; i >= 0; i--) {
+            const D = i / steps;
+            const netResult = computeNetWithPassengers(
+              D,
+              availableCabins,
+              totalPossible
+            );
+            const totalNet = netResult.totalNet + revenue;
+            if (totalNet >= targetValue) {
+              best = {
+                ...netResult,
+                D,
+                totalOccupancy:
+                  (realizedPassengers + netResult.passengersAdded) /
+                  max_passengers,
+                realizedPassengers,
+                totalPassengers: realizedPassengers + netResult.passengersAdded,
+              };
+              break;
+            }
+          }
+          return best;
+        }
+
+        // User discount feasibility
+        function userDiscountFeasibility(
+          targetValue,
+          availableCabins,
+          revenue,
+          userD
+        ) {
+          const totalPossible = Math.min(
+            Math.round(max_passengers * max_occupancy),
+            availableCabins.reduce((a, b) => a + b, 0) * 2
+          );
+          let realizedPassengers = 0;
+          for (let i = 0; i < availableCabins.length; i++) {
+            realizedPassengers += (totalCabins[i] - availableCabins[i]) * 2;
+          }
+
+          for (let p = 1; p <= totalPossible; p++) {
+            const netResult = computeNetWithPassengers(
+              userD,
+              availableCabins,
+              p
+            );
+            const totalNetWithRevenue = netResult.totalNet + revenue;
+            if (totalNetWithRevenue >= targetValue) {
+              netResult.totalOccupancy =
+                (realizedPassengers + netResult.passengersAdded) /
+                max_passengers;
+              netResult.realizedPassengers = realizedPassengers;
+              netResult.totalPassengers =
+                realizedPassengers + netResult.passengersAdded;
+              return netResult;
+            }
+          }
+          return null;
+        }
+
+        function calculate() {
+          const cabA = parseInt(document.getElementById("cabA").value) || 0;
+          const cabB = parseInt(document.getElementById("cabB").value) || 0;
+          const cabC = parseInt(document.getElementById("cabC").value) || 0;
+          const revenue =
+            parseFloat(document.getElementById("revenue").value) || 0;
+          const userDiscount =
+            parseFloat(document.getElementById("userDiscount").value) / 100 ||
+            0;
+          const available = [cabA, cabB, cabC];
+
+          const selectedDate = dateSelect.value;
+          const targets = dateTargets[selectedDate];
+          const outputDiv = document.getElementById("output");
+          outputDiv.innerHTML = "";
+
+          const tableDiv = document.getElementById("tableOutput");
+          tableDiv.innerHTML = "";
+
+          let tableHtml =
+            "<table><tr><th>Target</th><th>Target Value</th><th>Feasible</th><th>User Discount %</th><th>Highest Discount %</th><th>Total Net</th><th>Avg Net/Passenger</th><th>Passengers Added</th><th>Realized Passengers</th><th>Total Passengers</th><th>Total Occupancy</th></tr>";
+
+          for (const [tname, tval] of Object.entries(targets)) {
+            const userResult = userDiscountFeasibility(
+              tval,
+              available,
+              revenue,
+              userDiscount
+            );
+            const highest = findHighestDiscount(tval, available, revenue);
+
+            const div = document.createElement("div");
+            div.className = "result";
+            const h = document.createElement("h3");
+            h.textContent = `${tname} (${tval.toLocaleString()})`;
+            div.appendChild(h);
+
+            if (!userResult) {
+              const p = document.createElement("p");
+              p.textContent = `❌ Target cannot be reached with ${
+                userDiscount * 100
+              }% discount within 90% occupancy.`;
+              div.appendChild(p);
+              tableHtml += `<tr class="unreachable"><td>${tname}</td><td>${tval}</td><td>No</td><td>${(
+                userDiscount * 100
+              ).toFixed(2)}</td><td>${
+                highest ? (highest.D * 100).toFixed(2) : "-"
+              }</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>`;
+            } else {
+              const totalNetWithRevenue = userResult.totalNet + revenue;
+              const fields = [
+                `✅ Feasible with ${userDiscount * 100}% discount`,
+                `Highest possible discount: ${
+                  highest ? (highest.D * 100).toFixed(2) : "-"
+                }%`,
+                `Total Net Revenue: ${totalNetWithRevenue.toFixed(2)}`,
+                `Average Net per Passenger: ${userResult.avgNetPP.toFixed(2)}`,
+                `Passengers added: ${userResult.passengersAdded}`,
+                `Realized passengers: ${userResult.realizedPassengers}`,
+                `Total Passengers: ${userResult.totalPassengers}`,
+                `Total Occupancy Level: ${(
+                  userResult.totalOccupancy * 100
+                ).toFixed(2)}%`,
+              ];
+              fields.forEach((f) => {
+                const p = document.createElement("p");
+                p.textContent = f;
+                div.appendChild(p);
+              });
+
+              tableHtml += `<tr class="feasible">
+      <td>${tname}</td>
+      <td>${tval}</td>
+      <td>Yes</td>
+      <td>${(userDiscount * 100).toFixed(2)}</td>
+      <td>${highest ? (highest.D * 100).toFixed(2) : "-"}</td>
+      <td>${totalNetWithRevenue.toFixed(2)}</td>
+      <td>${userResult.avgNetPP.toFixed(2)}</td>
+      <td>${userResult.passengersAdded}</td>
+      <td>${userResult.realizedPassengers}</td>
+      <td>${userResult.totalPassengers}</td>
+      <td>${(userResult.totalOccupancy * 100).toFixed(2)}%</td>
+      </tr>`;
+            }
+            outputDiv.appendChild(div);
+          }
+
+          tableHtml += "</table>";
+          tableDiv.innerHTML = tableHtml;
+        }
+      </script>
+    </div>
+  </body>
+</html>
