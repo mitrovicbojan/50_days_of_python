@@ -21,3 +21,11 @@ and last number in the list. For example, if the input is [2, 5,
 7, 8, 9], your code should return [0, 5, 7, 8, 0].
 '''
 
+def zeroed(num_lst):
+    b = num_lst[1:-1]
+    b.insert(0, 0)
+    b.insert(b[-1], 0)
+    return b
+
+print(zeroed([2, 5,
+7, 8, 9]))
