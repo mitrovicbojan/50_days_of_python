@@ -25,3 +25,16 @@ you pass [2, 1, 4, 7, 6] as your argument, your code should return
 [1, 2, 4, 6, 7].
 
 '''
+
+def zeros_last(lst):
+        
+    for i in lst:
+        if i == 0:
+            lst.remove(0)
+            lst.append(0)
+    
+    return print(lst)
+           
+    
+    
+zeros_last([1, 4, 6, 0, 7, 0,9])
