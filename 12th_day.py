@@ -39,7 +39,6 @@ You are 48, 355, 200 minutes old.
 #A standard year has 525,600 minutes, while a leap year has 527,040 minutes
 from datetime import date
 import calendar
-#calendar.isleap()
 
 d = date.today().year
 
@@ -47,7 +46,7 @@ user_year = 1945
 
 min_old = 0
 
-for i in range(user_year, d):
+for i in range(user_year, d + 1):
     if calendar.isleap(user_year):
         min_old = min_old + 527040
     else: 
