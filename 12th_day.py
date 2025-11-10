@@ -42,14 +42,30 @@ import calendar
 
 d = date.today().year
 
-user_year = 1945
 
-min_old = 0
 
-for i in range(user_year, d + 1):
-    if calendar.isleap(user_year):
-        min_old = min_old + 527040
-    else: 
-        min_old = min_old + 525600
+def age_in_minutes():    
+    
+    min_old = 0
+    
+    user_input = input("Please eneter your year of birth: ")
+    
+    if len(user_input) != 4:
+        return print('Please enter valid four-digit number.')
+    
+    if int(user_input) < int(d) - 120 or int(user_input) >= int(d):
+        return print('Please enter valid year.')
+    
+    user_year = int(user_input)
+    
+    for i in range(user_year, d + 1):
+        if calendar.isleap(user_year):
+            min_old = min_old + 527040
+        else: 
+            min_old = min_old + 525600    
 
-print(f"{min_old:,}")
+    return f"{min_old:,}"
+
+print(age_in_minutes())
+
+
