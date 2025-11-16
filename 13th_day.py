@@ -23,6 +23,7 @@ def your_vat():
             
         except ValueError:
             print("Please enter correct price and VAT.")
+        
 
 print(your_vat())
 

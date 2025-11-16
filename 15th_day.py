@@ -1,0 +1,8 @@
+'''
+Write a functioncalled same_in_reverse that takes a string and
+checks if the string reads the same in reverse. If it is the same, the
+code should return True if not, it should return False. For
+example,
+"dad" should return True, because it reads the same in
+reverse.
+'''
