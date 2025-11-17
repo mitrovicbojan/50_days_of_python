@@ -40,7 +40,16 @@ def your_age():
     
     user_name_input = input("Please enter your name: ").lower()
     
+    if user_name_input in names_age:
+        return f"Hi, {user_name_input.capitalize()}, you are {names_age[user_name_input]} years old."
+    else: 
+        print("Your name is not in the dictionary.")
+        user_age = int(input("Please enter your age: "))
+                
+        names_age[user_name_input] = user_age
+        return f"Hi, {user_name_input.capitalize()}, you are {names_age[user_name_input]} years old."
+           
+  
     
-    return user_name_input
 
 print(your_age())
