@@ -29,3 +29,14 @@ their length. For example, the list above should return:
 ['Jon','Peter','Andrew']
 Do not use the built-in sort functions.
 '''
+names = [ "Peter","Jon","Andrew"]
+def sort_length(lst):
+    n = len(lst)
+    for i in range(n):
+        for j in range(i+1, n):
+            if len(lst[i]) > len(lst[j]):
+                temp = lst[i]
+                lst[i] = lst[j]
+                lst[j] = temp
+    return lst
+print(sort_length(names))
