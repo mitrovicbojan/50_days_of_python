@@ -6,7 +6,14 @@ arguments, your function should return 37.0 as the average. If you
 pass 12 and 90, your function should return 51.0 as the average.
 
 '''
+def any_number(*args):
+    list_of_nums = list(args)
+    
+    list_sum = sum(list_of_nums)
+    
+    return print(list_sum / len(list_of_nums))
 
+any_number(12,90)
 '''
 Write a function called add_reverse. This function takes two
 lists as arguments, adds each corresponding number, and
