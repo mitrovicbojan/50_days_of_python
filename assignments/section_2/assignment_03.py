@@ -12,3 +12,14 @@ IMPORTANT: you must do this programmatically! Don't just
 original_list = ['cup', 'cereal', 'milk', (8, 4, 3)]
 
 # your code below:
+
+num1 = original_list[3][0]
+num2 = original_list[3][1]
+num3 = original_list[3][2]
+
+new_list = [num1,num2, num3]
+new_list.sort()
+sorted_tuple = (new_list[0], new_list[1], new_list[2])
+new_list_sorted = original_list[:3]
+new_list_sorted.append(sorted_tuple)
+print(new_list_sorted)
