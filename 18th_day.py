@@ -23,3 +23,21 @@ two lists are not of equal length, the code should return a
 message that "the lists are not of equal length.
 "
 '''
+
+def add_reverse(lst, lst2):
+    if len(lst) != len(lst2):
+        return "The lists are not of equal length."
+    
+    reversed_list = []    
+    count = 0
+   
+   
+    for i in lst:
+        reversed_list.append(i + lst2[count])            
+        count=count + 1 
+      
+    return list(reversed(reversed_list))
+
+    
+
+print(add_reverse([10, 12, 34], [12, 56, 78]))
