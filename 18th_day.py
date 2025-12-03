@@ -29,8 +29,7 @@ def add_reverse(lst, lst2):
         return "The lists are not of equal length."
     
     reversed_list = []    
-    count = 0
-   
+    count = 0  
    
     for i in lst:
         reversed_list.append(i + lst2[count])            
