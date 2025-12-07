@@ -18,7 +18,20 @@ last2('axxxaaxx') → 2
 
 # Your Code Below:
 
+def last2(string):
+    if len(string) <=2:
+        return 0
+    last_two = string[len(string) - 2:]
+    counter = 0
+    
+    for i in range(len(string) - 2):
+        sub = string[i:i+2]
+        
+        if sub == last_two:
+            counter = counter + 1
+    return counter    
 
+print(last2('axxxxaaxx'))
 
 # print(last2('hixxhi')) #→ 1
 # print(last2('xaxxaxaxx')) #→ 1
