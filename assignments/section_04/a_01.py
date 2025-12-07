@@ -13,3 +13,13 @@ twelver(9, 3) → True
 """
 
 # Your Code Below:
+
+def twelver(a,b):
+    
+    sum_num = a + b
+    if a == 12 or b == 12 or sum_num == 12:
+        return True
+    
+    return False
+
+print(twelver(2,10))
