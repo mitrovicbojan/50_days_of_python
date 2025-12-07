@@ -18,3 +18,20 @@ Example:
 """
 
 # Your Code Below:
+
+def pay_extra(working, hours):
+    
+    extra_hours = [21,22,23,24,1,2,3,4,5,6,7]
+    working_extra_hours = False
+    
+    for i in extra_hours:
+        if i == hours:
+            working_extra_hours = True
+    
+    if  working == True and working_extra_hours == True:
+        return "true"
+    
+    return "false"
+
+print(pay_extra(True, 8))
+
