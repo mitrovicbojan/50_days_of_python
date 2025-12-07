@@ -15,3 +15,19 @@ sum78([1, 1, 7, 8, 2]) → 4
 """
 
 #Your Code Below:
+
+def sum78(nums):
+    sum_nums = 0  
+    
+    for i in nums:
+        seven_index = nums.index(7)
+        eight_index = nums.index(8)
+    
+        if i not in nums[seven_index: eight_index + 1]:
+            sum_nums = i + sum_nums
+            
+    return sum_nums
+
+print(sum78([1, 1, 7, 8, 2]))
+    
+    
