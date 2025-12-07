@@ -10,3 +10,12 @@ grow_string('ab') → 'aab'
 """
 
 # Your Code Below:
+
+def grow_string(string):
+    result = ''
+    for i in range(len(string)):
+        result = result + string[:i+1]
+    
+    return result
+
+print(grow_string('Code'))
