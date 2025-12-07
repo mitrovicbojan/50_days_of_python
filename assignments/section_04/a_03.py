@@ -12,3 +12,12 @@ sequence([]) → False
 """
 
 # Your Code Below:
+
+def sequence(lst):
+    
+    for i in range(len(lst) - 2):
+        if lst[i] == 1 and lst[i+1] == 2 and lst[i+2] == 3:
+            return True 
+    return False
+
+print(sequence([1, 1, 2, 3, 1]))
