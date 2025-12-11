@@ -9,4 +9,13 @@ class Vehicle:
     def get_vehicle_count(self):
         return Vehicle.vehicle_counter
     
-    
+    def drive(self):
+        print("vehicle driving...")
+
+class Truck(Vehicle):
+    def drive(self):
+        print("Truck driving...")
+        
+class Motorcycle(Vehicle):
+    def drive(self):
+        print("Motorcycle driving very fast...")
