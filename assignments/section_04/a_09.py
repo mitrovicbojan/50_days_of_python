@@ -40,13 +40,15 @@ d= {
 # --------------------------------------
 
 
+testing = '7@comp1.COM|4|11|GDSPV'
 
+print(testing.index("|"))
 
 
 
 # don't change the lines below:
 # --------------------------------------
-print("Value of fr: ")
-print(fr)
-print("Value of d:")
-print(d)
+# print("Value of fr: ")
+# print(fr)
+# print("Value of d:")
+# print(d)
