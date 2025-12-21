@@ -27,4 +27,12 @@ range_checker(6, 4, 12)   # Returns: True (6 is half of max_val 12)
 '''
 
 def range_checker(number, min_val, max_val):
-    pass
+    dbl_min_val = min_val * 2
+    half_max_val = max_val / 2
+    
+    if (number <= max_val and number >= min_val) or (number == dbl_min_val) or (number == half_max_val):
+        return True
+    else:
+        return False
+
+print(range_checker(15, 5, 12))
