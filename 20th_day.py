@@ -17,7 +17,7 @@ def capitalize(string):
 print(capitalize("i like learning."))
 
 '''
-str1 = 'leArning is hard, bUt if You appLy youRself ' \ 'you can achieVe success'
+str1 = 'leArning is hard, bUt if You appLy youRself you can achieVe success'
 
 You are given a string of words. Some of the words in the string
 contain uppercase letters. Write a code that will return all the
@@ -26,3 +26,15 @@ list of the words. Each word in the list should be reversed. Here
 is how your output should look:
 ['gninrAel','tUb','uoY','yLppa','flesRuoy','eVeihca']
 '''
+
+str1 = 'leArning is hard, bUt if You appLy youRself you can achieVe success'
+
+str_lst = str1.split()
+
+lst = []
+for i in str_lst:
+    if any(char.isupper() for char in i):
+        rev_str = i[::-1]
+        lst.append(rev_str)
+        
+print(lst)
