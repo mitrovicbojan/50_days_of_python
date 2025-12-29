@@ -26,3 +26,33 @@ return the largest even number in the inputted numbers. If
 there is no even number in the list, the code should return the
 average of all the five numbers.
 '''
+
+def even_or_average():
+    
+    lst = []
+    even_nums = []
+    count = 0
+    
+    while count < 5:
+        user_nums = input(f"Please 5 enter numbers ({count + 1}/5): ")
+        
+        try: 
+            num = int(user_nums)
+            
+            if num % 2 == 0:
+                even_nums.append(num)
+                
+            lst.append(num)
+            count +=1
+        except ValueError: 
+            print("Please enter number.")
+    
+    if len(even_nums) != 0:
+        return max(even_nums)
+    else:
+        avg = sum(lst) / 5
+        return avg
+    
+                          
+    
+print(even_or_average())
