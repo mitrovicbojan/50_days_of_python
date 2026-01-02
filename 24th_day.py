@@ -19,3 +19,4 @@ def average_calories():
     return print(f"Your average daily calorie intake is {result}")
 
 average_calories()
+
