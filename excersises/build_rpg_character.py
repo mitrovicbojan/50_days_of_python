@@ -59,9 +59,3 @@ def create_character(name, strength, iq, char):
     return f"{name}\nSTR {strength * full_dot}{(10 - strength) * empty_dot}\nINT {iq * full_dot}{(10 - iq) * empty_dot}\nCHA {char * full_dot}{(10 - char) * empty_dot}"
 
 print(create_character("john", 2,4,"jo"))
-
-
-int_1 = 4
-int_2 = 2
-
-print(int_1 ** int_2)
