@@ -60,3 +60,8 @@ def create_character(name, strength, iq, char):
 
 print(create_character("john", 2,4,"jo"))
 
+
+int_1 = 4
+int_2 = 2
+
+print(int_1 ** int_2)
