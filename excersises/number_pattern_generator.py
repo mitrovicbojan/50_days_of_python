@@ -36,3 +36,7 @@ def number_pattern(n):
     
 print(number_pattern(5))
 
+developer = ('Jane Doe', 23, 'Python Developer')
+del developer[1]
+print(developer)
+
