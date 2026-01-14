@@ -45,5 +45,18 @@ class Category:
         if amount > self.get_balance():
             return False
         return True
+    def __str__(self):
+        title = f"{self.name:*^30}\n"
+        all_transanctions = ""
+        
+        for transaction in self.ledger:
+            all_transanctions += (
+                    f"{transaction['description'][0:23]:<23}"
+                    f"{transaction['amount']:>7.2f}\n"
+                )
+        total = f"Total: {self.get_balance()}"
+        return title + all_transanctions + total    
+    
 def create_spend_chart(categories):
     pass
+
