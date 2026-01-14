@@ -1,3 +1,4 @@
+import math
 class Category:
     def __init__(self, name):
         self.name = name
@@ -58,5 +59,28 @@ class Category:
         return title + all_transanctions + total    
     
 def create_spend_chart(categories):
-    pass
-
+    total_spent = 0
+    category_spent = []
+    category_percentage = []
+    for category in categories:        
+        for transaction in category.ledger:            
+            if transaction['amount'] < 0:
+                total_spent += abs(transaction['amount'])
+               
+    for category in categories:  
+        category_sum = 0              
+        for transaction in category.ledger:  
+                      
+            if transaction['amount'] < 0:
+                category_sum  += abs(transaction['amount'])
+        category_spent.append(category_sum)
+        
+    for num in category_spent:
+        cat_percente = math.floor((num / total_spent) * 100 / 10) *10
+        category_percentage.append(cat_percente)
+    
+    print("Percentage spent by category")
+    
+    for num in range(100, -1, -10):
+        pass
+    
