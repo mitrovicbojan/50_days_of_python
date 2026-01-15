@@ -62,6 +62,7 @@ def create_spend_chart(categories):
     total_spent = 0
     category_spent = []
     category_percentage = []
+    category_name = []
     for category in categories:        
         for transaction in category.ledger:            
             if transaction['amount'] < 0:
@@ -79,8 +80,24 @@ def create_spend_chart(categories):
         cat_percente = math.floor((num / total_spent) * 100 / 10) *10
         category_percentage.append(cat_percente)
     
+    for category in categories:
+        category_name.append(category.name)
+    
+    max_name_length = max(len(i) for i in category_name)
+    
+ 
     print("Percentage spent by category")
     
-    for num in range(100, -1, -10):
-        pass
     
+    for num in range(100, -1, -10):
+        row = f"{num:>3}|"
+        for percentage in category_percentage:
+            if num <= percentage:
+                row += (" o ")
+            else:
+                row +="   "
+        print(row)
+        
+    count_names = len(category_name)
+    dash = "    " + "-" * (3 * count_names + 1)
+   
