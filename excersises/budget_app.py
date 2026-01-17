@@ -86,18 +86,34 @@ def create_spend_chart(categories):
     max_name_length = max(len(i) for i in category_name)
     
  
-    print("Percentage spent by category")
+    output = "Percentage spent by category\n"
     
     
     for num in range(100, -1, -10):
-        row = f"{num:>3}|"
+        
+        bar_row = f"{num:>3}| "
         for percentage in category_percentage:
-            if num <= percentage:
-                row += (" o ")
+            if percentage >= num:
+                bar_row += "o  "
             else:
-                row +="   "
-        print(row)
+                bar_row += "   "
+              
+        output += bar_row + "\n"
         
     count_names = len(category_name)
     dash = "    " + "-" * (3 * count_names + 1)
-   
+    
+    output += dash + "\n"
+    
+    for i in range(max_name_length):
+        row = "     "
+        for j, name in enumerate(category_name):
+            if i < len(name):
+                row += name[i]
+            else:
+                row += " "
+            
+            row += "  "   
+        output += row + "\n"
+    output = output.rstrip("\n")
+    return output
