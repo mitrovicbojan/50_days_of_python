@@ -39,18 +39,54 @@ class Book:
         
 class Library:
     def __init__(self, books):
-        self.books = [books]
+        self.books = books if books is not None else []
         
     def add_book(self, book):
+        if not isinstance(book, Book):
+            raise TypeError("Only Book objects can be added.")
         self.books.append(book)
-    
+        
     def list_books(self):
-        return self.books
+        return [
+            {"Title": book.title, 
+             "Author": book.author, 
+             "Checked-out": book.is_checked_out} for book in self.books
+        ]
     
     def check_out_book(self, title):
-        for i in self.books:
-            if title in self.books and self.books[i].is_checked_out() == False:
-                i.check_out()
-    
+        for book in self.books:
+            if book.title == title:
+                if book.is_checked_out == False:
+                    book.check_out()
+                    return True
+                else:
+                    return False
+        return False
+        
     def return_book(self, title):
-        pass
+        for book in self.books:
+            if book.title == title:
+                if book.is_checked_out == True:
+                    book.return_book()
+                    return True
+                else:
+                    return False
+        return False
+    
+    def available_books(self):
+        available = []
+        for book in self.books:
+            if book.is_checked_out == False:
+                available.append({"Title": book.title,"Author": book.author, })            
+        
+        if len(available) == 0:
+            return "No available books."
+        else:
+            return available
+        
+    def checked_out_books(self):
+        unavailable = []
+        for book in self.books:
+            if book.is_checked_out:
+                unavailable.append({"Title": book.title,"Author": book.author, })
+        return unavailable
